@@ -1,0 +1,1 @@
+injection=org.letter.common.extension.injection.impl.InjectExtImpl

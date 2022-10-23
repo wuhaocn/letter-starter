@@ -1,0 +1,2 @@
+memory=org.letter.common.status.support.MemoryStatusChecker
+load=org.letter.common.status.support.LoadStatusChecker

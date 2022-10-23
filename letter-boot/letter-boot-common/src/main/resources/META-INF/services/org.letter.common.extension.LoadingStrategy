@@ -1,0 +1,3 @@
+org.letter.common.extension.LetterInternalLoadingStrategy
+org.letter.common.extension.LetterLoadingStrategy
+org.letter.common.extension.ServicesLoadingStrategy

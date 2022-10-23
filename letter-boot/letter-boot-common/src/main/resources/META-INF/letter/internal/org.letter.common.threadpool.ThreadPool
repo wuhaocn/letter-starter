@@ -1,0 +1,4 @@
+fixed=org.letter.common.threadpool.support.fixed.FixedThreadPool
+cached=org.letter.common.threadpool.support.cached.CachedThreadPool
+limited=org.letter.common.threadpool.support.limited.LimitedThreadPool
+eager=org.letter.common.threadpool.support.eager.EagerThreadPool

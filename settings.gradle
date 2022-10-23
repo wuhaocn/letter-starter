@@ -1,0 +1,5 @@
+rootProject.name = 'letter-starter'
+//letter-framework
+
+include 'letter-boot:letter-boot-common'
+include 'letter-app:letter-sentinel:letter-sentinel-token-sever'

@@ -1,0 +1,1 @@
+default=org.letter.common.lang.DefaultShutdownHookCallback

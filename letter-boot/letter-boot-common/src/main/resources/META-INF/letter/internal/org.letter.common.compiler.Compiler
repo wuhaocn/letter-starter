@@ -1,0 +1,2 @@
+adaptive=org.letter.common.compiler.support.AdaptiveCompiler
+jdk=org.letter.common.compiler.support.JdkCompiler

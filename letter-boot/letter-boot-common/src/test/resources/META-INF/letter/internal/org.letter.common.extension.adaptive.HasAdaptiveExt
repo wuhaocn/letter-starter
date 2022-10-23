@@ -1,0 +1,2 @@
+adaptive=org.letter.common.extension.adaptive.impl.HasAdaptiveExt_ManualAdaptive
+impl1=org.letter.common.extension.adaptive.impl.HasAdaptiveExtImpl1

@@ -1,0 +1,2 @@
+adaptive=org.letter.common.extension.factory.AdaptiveExtensionFactory
+spi=org.letter.common.extension.factory.SpiExtensionFactory

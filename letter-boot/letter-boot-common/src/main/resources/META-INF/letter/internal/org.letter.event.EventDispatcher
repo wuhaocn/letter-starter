@@ -1,0 +1,2 @@
+direct=org.letter.event.DirectEventDispatcher
+parallel=org.letter.event.ParallelEventDispatcher

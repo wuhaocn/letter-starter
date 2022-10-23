@@ -1,0 +1,4 @@
+demo=org.letter.common.extension.wrapper.impl.DemoImpl
+wrapper=org.letter.common.extension.wrapper.impl.DemoWrapper
+wrapper2=org.letter.common.extension.wrapper.impl.DemoWrapper2
+demo2=org.letter.common.extension.wrapper.impl.DemoImpl

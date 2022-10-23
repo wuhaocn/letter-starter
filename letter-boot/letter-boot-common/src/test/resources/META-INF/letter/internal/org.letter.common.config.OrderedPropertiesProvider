@@ -1,0 +1,2 @@
+mock1=org.letter.common.config.MockOrderedPropertiesProvider1
+mock2=org.letter.common.config.MockOrderedPropertiesProvider2
