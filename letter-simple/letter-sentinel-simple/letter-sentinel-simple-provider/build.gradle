@@ -1,6 +1,15 @@
 dependencies {
   //log4j
   compile "org.slf4j:slf4j-api:${slf4j_version}"
+  //spring
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springboot_version
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springboot_version
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springboot_version
+
+  //sentinel
+// https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-core
+  implementation group: 'com.alibaba.csp', name: 'sentinel-core', version: '1.8.5'
+
 
   //测试库
   testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
