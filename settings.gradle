@@ -2,4 +2,11 @@ rootProject.name = 'letter-starter'
 //letter-framework
 
 include 'letter-boot:letter-boot-common'
+include 'letter-boot:letter-boot-springboot-starter'
+include 'letter-boot:letter-boot-dubbo-starter'
+include 'letter-boot:letter-boot-akka-starter'
 include 'letter-app:letter-sentinel:letter-sentinel-token-sever'
+include 'letter-app:letter-sentinel:letter-sentinel-dashboard'
+
+include 'letter-simple:letter-sentinel-simple:letter-sentinel-simple-consumer'
+include 'letter-simple:letter-sentinel-simple:letter-sentinel-simple-provider'
