@@ -1,0 +1,22 @@
+dependencies {
+  //log4j
+  implementation "org.slf4j:slf4j-api:${slf4j_version}"
+  implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+  implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+  implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+  implementation "io.dropwizard.metrics:metrics-core:${metrics_version}"
+  implementation "io.dropwizard.metrics:metrics-jvm:${metrics_version}"
+  implementation "io.dropwizard.metrics:metrics-jmx:${metrics_version}"
+  implementation "io.prometheus:simpleclient:${prometheus_version}"
+  implementation "io.prometheus:simpleclient_httpserver:${prometheus_version}"
+  implementation "io.prometheus:simpleclient_hotspot:${prometheus_version}"
+  implementation "io.prometheus:simpleclient_dropwizard:${prometheus_version}"
+
+  //测试库
+  testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.0'
+  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
+  testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+
+
+}

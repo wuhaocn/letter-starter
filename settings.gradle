@@ -2,6 +2,7 @@ rootProject.name = 'letter-starter'
 //letter-framework
 
 include 'letter-boot:letter-boot-common'
+include 'letter-boot:letter-boot-metrics'
 include 'letter-boot:letter-boot-springboot-starter'
 include 'letter-boot:letter-boot-dubbo-starter'
 include 'letter-boot:letter-boot-akka-starter'
