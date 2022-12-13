@@ -21,28 +21,14 @@ import java.util.List;
  */
 
 public class RegisterManager {
-	public static void main(String[] args) throws Exception {
-		String url = "http://127.0.0.1:18500/v1/agent/service/register";
-		System.out.println(register(url));
-	}
 
-	public static String register(String addr) throws Exception {
-		ServerRegistration registration = new ServerRegistration();
-		List<String> tags = new ArrayList<>();
-		List<ServerCheck> checks = new ArrayList<>();
-		ServerCheck serverCheck = new ServerCheck();
-		serverCheck.setHttp("http://192.168.1.6:8901/");
-		tags.add("service");
-		registration.setId("test")
-				.setName("test")
-				.setAddress("192.168.1.6")
-				.setPort(8901)
-				.setTags(tags)
-				.setMeta(new ServerMeta())
-				.setChecks(checks);
+
+	public static String register(String addr, ServerRegistration registration) throws Exception {
 		String content = JsonUtil.toJson(registration).toString();
 		return put(addr, content);
 	}
+
+
 
 	public static String put(String addr, String content) throws Exception {
 
