@@ -11,6 +11,7 @@ dependencies {
   implementation "io.prometheus:simpleclient_httpserver:${prometheus_version}"
   implementation "io.prometheus:simpleclient_hotspot:${prometheus_version}"
   implementation "io.prometheus:simpleclient_dropwizard:${prometheus_version}"
+  implementation 'org.yaml:snakeyaml:1.33'
 
   //测试库
   testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'

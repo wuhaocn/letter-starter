@@ -11,3 +11,4 @@ include 'letter-app:letter-sentinel:letter-sentinel-dashboard'
 
 include 'letter-simple:letter-sentinel-simple:letter-sentinel-simple-consumer'
 include 'letter-simple:letter-sentinel-simple:letter-sentinel-simple-provider'
+include 'letter-simple:letter-spring-simple:letter-spring-simple-server'

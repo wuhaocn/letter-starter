@@ -1,7 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.letter.cloud.common.autoconfig.CommonAutoConfiguration,\
-org.letter.cloud.register.RegisterCenterAutoConfiguration,\
-org.letter.cloud.config.autoconfig.ConfigCenterAutoConfiguration
+org.letter.springboot.CommonAutoConfiguration
 org.springframework.context.ApplicationListener=\
-letter.cloud.common.autoconfig.LogoApplicationListener
+org.letter.springboot.starter.LogoApplicationListener
 

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: simple-server
+server:
+  port: 8089
+
+monitor:
+  consulUrl: http://127.0.0.1:18500/v1/agent/service/register
+

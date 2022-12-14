@@ -8,8 +8,8 @@ package org.letter.perform.register;
 
 public class ServerMeta {
 	private String version = "1.0";
-	private String item = "MSG";
-	private String app = "MSG";
+	private String item = "app";
+	private String app = "app";
 
 	public String getVersion() {
 		return version;

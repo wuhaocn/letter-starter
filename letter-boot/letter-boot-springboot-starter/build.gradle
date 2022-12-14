@@ -1,22 +1,18 @@
 dependencies {
   //log4j
-  compile project(':letter-boot:letter-boot-metrics')
-  compile "org.slf4j:slf4j-api:${slf4j_version}"
-  compile(group: 'org.springframework.boot', name: 'spring-boot-starter', version: spring_boot_version) {
-    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-  }
-  compile(group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: spring_boot_version) {
-    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-  }
-  compile("org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}") {
-    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' //by both name and group
+  implementation project(':letter-boot:letter-boot-metrics')
+  implementation "org.slf4j:slf4j-api:${slf4j_version}"
+  implementation 'org.apache.commons:commons-lang3:3.12.0'
+  implementation "org.springframework.boot:spring-boot-starter:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-aop:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-actuator:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-configuration-processor:${springboot_version}"
 
-  }
   //测试库
-  testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.0'
-  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
-  testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+  testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.0'
+  testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
+  testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
 
 }

@@ -1,6 +1,6 @@
 dependencies {
   //log4j
-  compile "org.slf4j:slf4j-api:${slf4j_version}"
+  implementation "org.slf4j:slf4j-api:${slf4j_version}"
 
   //测试库
   testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'

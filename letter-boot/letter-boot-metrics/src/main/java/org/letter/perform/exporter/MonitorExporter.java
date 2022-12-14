@@ -19,7 +19,7 @@ public class MonitorExporter {
 		if (atomicBoolean.compareAndSet(false, true)) {
 			MetricRegistryManager metricRegistryManager = MetricRegistryManager.getInstance();
 			CollectorRegistry.defaultRegistry.register(new DropwizardExports(metricRegistryManager.getMetricRegistry()));
-			HTTPServer httpServer = new HTTPServer(port);
+			HTTPServer httpServer = new HTTPServer("0.0.0.0", port);
 
 		}
 	}

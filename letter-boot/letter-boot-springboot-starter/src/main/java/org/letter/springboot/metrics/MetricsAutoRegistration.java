@@ -1,11 +1,14 @@
 package org.letter.springboot.metrics;
 
-import io.micrometer.core.instrument.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.letter.perform.exporter.MonitorExporter;
 import org.letter.perform.register.RegisterManager;
 import org.letter.perform.register.ServerCheck;
 import org.letter.perform.register.ServerMeta;
 import org.letter.perform.register.ServerRegistration;
+import org.letter.springboot.CommonAutoConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -18,6 +21,8 @@ import java.util.List;
  */
 public class MetricsAutoRegistration {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommonAutoConfiguration.class);
+
 	public MetricsAutoRegistration() {
 	}
 	public void registerAndStart(MetricsConfig config){
@@ -28,15 +33,17 @@ public class MetricsAutoRegistration {
 			ServerRegistration registration = getServerRegistration(config);
 			RegisterManager.register(config.getConsulUrl(), registration);
 			MonitorExporter.start(config.getPort());
+			LOGGER.info("MetricsAutoRegistration Complete:{}:{} To:{}", config.getIp(),
+					config.getPort(), config.getConsulUrl());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("MetricsAutoRegistration registerAndStart Fail:{}:{}", config.getIp(), config.getPort(), e);
 		}
 	}
 	public boolean check(MetricsConfig config){
 		if (StringUtils.isNotEmpty(config.getConsulUrl())){
 			return true;
 		}
-		return false;
+		return true;
 	}
 	public ServerRegistration getServerRegistration(MetricsConfig config) {
 		ServerRegistration registration = new ServerRegistration();
@@ -52,6 +59,6 @@ public class MetricsAutoRegistration {
 				.setTags(tags)
 				.setMeta(new ServerMeta())
 				.setChecks(checks);
-		return null;
+		return registration;
 	}
 }
