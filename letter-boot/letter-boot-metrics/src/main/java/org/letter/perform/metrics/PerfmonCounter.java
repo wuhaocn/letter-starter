@@ -1,6 +1,8 @@
 package org.letter.perform.metrics;
 
 import com.codahale.metrics.*;
+import org.letter.perform.jmx.metrics.MetricRegistryManager;
+import org.letter.perform.jmx.metrics.MetricsConstant;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;

@@ -3,7 +3,7 @@ package org.letter.perform.exporter;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.dropwizard.DropwizardExports;
 import io.prometheus.client.exporter.HTTPServer;
-import org.letter.perform.metrics.MetricRegistryManager;
+import org.letter.perform.jmx.metrics.MetricRegistryManager;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;

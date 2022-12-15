@@ -1,8 +1,9 @@
-package org.letter.perform.metrics;
+package org.letter.perform.jmx.metrics;
 
 /**
  *
- **/
+ *
+ * @author wuhao*/
 public class MetricsConstant {
     private MetricsConstant() { }
 
