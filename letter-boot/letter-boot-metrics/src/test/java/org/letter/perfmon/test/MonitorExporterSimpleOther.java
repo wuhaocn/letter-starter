@@ -25,6 +25,11 @@ public class MonitorExporterSimpleOther {
 	public static void main(String[] args) throws Exception {
 		MetricRegistryManager.getInstance();
 		new BuildInfoCollector().register();
+		System.setProperty("com.sun.management.jmxremote.rmi.port", "2199");
+		System.setProperty("com.sun.management.jmxremote.port", "2199");
+		System.setProperty("com.sun.management.jmxremote.ssl", "false");
+		System.setProperty("com.sun.management.jmxremote.ssl", "false");
+		System.setProperty("com.sun.management.jmxremote", "true");
 		
 		CollectorRegistry.defaultRegistry.register(new JmxCollector());
 		//启动监控server

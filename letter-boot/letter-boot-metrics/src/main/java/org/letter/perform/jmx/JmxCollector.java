@@ -1,13 +1,15 @@
 package org.letter.perform.jmx;
 
 import io.prometheus.client.Collector;
+import org.letter.perform.jmx.bean.MBeanReceiver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,9 +21,8 @@ import static java.lang.String.format;
  * @author wuhao
  */
 public class JmxCollector extends Collector implements Collector.Describable {
-
-
-	private static final Logger LOGGER = Logger.getLogger(JmxCollector.class.getName());
+	private Pattern DEFAULT_PATTERN = Pattern.compile(".*");
+	private static final Logger LOGGER = LoggerFactory.getLogger(JmxCollector.class);
 
 	static class Rule {
 		Pattern pattern;
@@ -37,28 +38,31 @@ public class JmxCollector extends Collector implements Collector.Describable {
 	}
 
 	private static class Config {
-		Integer startDelaySeconds = 0;
 		boolean lowercaseOutputName;
 		boolean lowercaseOutputLabelNames;
 		List<ObjectName> whitelistObjectNames = new ArrayList<ObjectName>();
 		List<ObjectName> blacklistObjectNames = new ArrayList<ObjectName>();
 		List<Rule> rules = new ArrayList<Rule>();
-		long lastUpdate = 0L;
-
 		MatchedRulesCache rulesCache;
 	}
 
-	private Config config;
-	private long createTimeNanoSecs = System.nanoTime();
 
 	private final JmxMBeanPropertyCache jmxMBeanPropertyCache = new JmxMBeanPropertyCache();
 
-	public JmxCollector() throws MalformedObjectNameException {
-		config = new Config();
+	public JmxCollector() {
 	}
 
-
-	private synchronized Config getLatestConfig() {
+	private Config getJmxConfig() {
+		Config config = new Config();
+		try {
+			config.whitelistObjectNames = Arrays.asList(new ObjectName("metrics:*"));
+			Rule rule = new Rule();
+			rule.pattern = DEFAULT_PATTERN;
+			config.rules.add(rule);
+			config.rulesCache = new MatchedRulesCache(config.rules);
+		} catch (MalformedObjectNameException e) {
+			LOGGER.error("getJmxConfig Error: ", e);
+		}
 		return config;
 	}
 
@@ -122,14 +126,11 @@ public class JmxCollector extends Collector implements Collector.Describable {
 				(input >= '0' && input <= '9'));
 	}
 
-	class Receiver implements JmxScraper.MBeanReceiver {
-		Map<String, MetricFamilySamples> metricFamilySamplesMap =
-				new HashMap<String, MetricFamilySamples>();
-
-		Config config;
+	class Receiver implements MBeanReceiver {
+		Map<String, MetricFamilySamples> metricFamilySamplesMap = new HashMap<String, MetricFamilySamples>();
 		MatchedRulesCache.StalenessTracker stalenessTracker;
-
 		private static final char SEP = '_';
+		Config config;
 
 		Receiver(Config config, MatchedRulesCache.StalenessTracker stalenessTracker) {
 			this.config = config;
@@ -156,7 +157,6 @@ public class JmxCollector extends Collector implements Collector.Describable {
 					labels += existing.labelNames.get(i) + "=" + existing.labelValues.get(i) + ",";
 				}
 				labels += "}";
-				LOGGER.fine("Metric " + existing.name + labels + " was created multiple times. Keeping the first occurrence. Dropping the others.");
 			} else {
 				mfs.samples.add(sample);
 			}
@@ -224,6 +224,8 @@ public class JmxCollector extends Collector implements Collector.Describable {
 					labelValues.add(entry.getValue());
 				}
 			}
+			labelNames.add("tttName");
+			labelValues.add("tttValues");
 
 			return new MatchedRule(fullname, matchName, type, help, labelNames, labelValues, value, valueFactor);
 		}
@@ -288,7 +290,7 @@ public class JmxCollector extends Collector implements Collector.Describable {
 					try {
 						value = Double.valueOf(val);
 					} catch (NumberFormatException e) {
-						LOGGER.fine("Unable to parse configured value '" + val + "' to number for bean: " + beanName + attrName + ": " + beanValue);
+						LOGGER.info("Unable to parse configured value '" + val + "' to number for bean: " + beanName + attrName + ": " + beanValue);
 						return;
 					}
 				}
@@ -357,12 +359,12 @@ public class JmxCollector extends Collector implements Collector.Describable {
 			} else if (beanValue instanceof Boolean) {
 				value = (Boolean) beanValue ? 1 : 0;
 			} else {
-				LOGGER.fine("Ignoring unsupported bean: " + beanName + attrName + ": " + beanValue);
+				LOGGER.info("Ignoring unsupported bean: " + beanName + attrName + ": " + beanValue);
 				return;
 			}
 
 			// Add to samples.
-			LOGGER.fine("add metric sample: " + matchedRule.name + " " + matchedRule.labelNames + " " + matchedRule.labelValues + " " + value.doubleValue());
+			LOGGER.info("add metric sample: " + matchedRule.name + " " + matchedRule.labelNames + " " + matchedRule.labelValues + " " + value.doubleValue());
 			addSample(new MetricFamilySamples.Sample(matchedRule.name, matchedRule.labelNames, matchedRule.labelValues, value.doubleValue()), matchedRule.type, matchedRule.help);
 		}
 
@@ -372,24 +374,20 @@ public class JmxCollector extends Collector implements Collector.Describable {
 	public List<MetricFamilySamples> collect() {
 		// Take a reference to the current config and collect with this one
 		// (to avoid race conditions in case another thread reloads the config in the meantime)
-		Config config = getLatestConfig();
+		Config config = getJmxConfig();
 
 		MatchedRulesCache.StalenessTracker stalenessTracker = new MatchedRulesCache.StalenessTracker();
 		Receiver receiver = new Receiver(config, stalenessTracker);
 		JmxScraper scraper = new JmxScraper(config.whitelistObjectNames, config.blacklistObjectNames, receiver, jmxMBeanPropertyCache);
 		long start = System.nanoTime();
 		double error = 0;
-		if ((config.startDelaySeconds > 0) &&
-				((start - createTimeNanoSecs) / 1000000000L < config.startDelaySeconds)) {
-			throw new IllegalStateException("JMXCollector waiting for startDelaySeconds");
-		}
 		try {
 			scraper.doScrape();
 		} catch (Exception e) {
 			error = 1;
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
-			LOGGER.severe("JMX scrape failed: " + sw.toString());
+			LOGGER.info("JMX scrape failed: {}", sw.toString());
 		}
 		config.rulesCache.evictStaleEntries(stalenessTracker);
 

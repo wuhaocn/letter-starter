@@ -1,5 +1,6 @@
 package org.letter.perform.jmx;
 
+import org.letter.perform.jmx.bean.MBeanReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,20 +14,13 @@ import java.lang.management.ManagementFactory;
 import java.util.*;
 
 
+/**
+ * JmxScraper
+ *
+ * @author wuhao
+ */
 public class JmxScraper {
-	private static final Logger logger = LoggerFactory.getLogger(JmxScraper.class);
-
-
-	public static interface MBeanReceiver {
-		void recordBean(
-				String domain,
-				LinkedHashMap<String, String> beanProperties,
-				LinkedList<String> attrKeys,
-				String attrName,
-				String attrType,
-				String attrDescription,
-				Object value);
-	}
+	private static final Logger LOGGER = LoggerFactory.getLogger(JmxScraper.class);
 
 	private final MBeanReceiver receiver;
 
@@ -38,7 +32,6 @@ public class JmxScraper {
 					  MBeanReceiver receiver, JmxMBeanPropertyCache jmxMBeanPropertyCache) {
 
 		this.receiver = receiver;
-
 		this.whitelistObjectNames = whitelistObjectNames;
 		this.blacklistObjectNames = blacklistObjectNames;
 		this.jmxMBeanPropertyCache = jmxMBeanPropertyCache;
@@ -48,35 +41,31 @@ public class JmxScraper {
 	 * Get a list of mbeans on host_port and scrape their values.
 	 * <p>
 	 * Values are passed to the receiver in a single thread.
+	 * @throws Exception
 	 */
 	public void doScrape() throws Exception {
 
 		try {
+			long start = System.currentTimeMillis();
 			MBeanServerConnection beanConn = ManagementFactory.getPlatformMBeanServer();
-			// Query MBean names, see #89 for reasons queryMBeans() is used instead of queryNames()
 			Set<ObjectName> mBeanNames = new HashSet<ObjectName>();
 			for (ObjectName name : whitelistObjectNames) {
 				for (ObjectInstance instance : beanConn.queryMBeans(name, null)) {
 					mBeanNames.add(instance.getObjectName());
 				}
 			}
-
 			for (ObjectName name : blacklistObjectNames) {
 				for (ObjectInstance instance : beanConn.queryMBeans(name, null)) {
 					mBeanNames.remove(instance.getObjectName());
 				}
 			}
-
-			// Now that we have *only* the whitelisted mBeans, remove any old ones from the cache:
 			jmxMBeanPropertyCache.onlyKeepMBeans(mBeanNames);
-
 			for (ObjectName objectName : mBeanNames) {
-				long start = System.nanoTime();
 				scrapeBean(beanConn, objectName);
-				logger.info("TIME: " + (System.nanoTime() - start) + " ns for " + objectName.toString());
 			}
+			LOGGER.info("doScrape Use:{}ms", (System.currentTimeMillis() - start) );
 		} catch (Exception e) {
-			logger.error("", e);
+			LOGGER.error("doScrape Error:", e);
 		}
 	}
 
@@ -288,32 +277,8 @@ public class JmxScraper {
 	}
 
 	private static void logScrape(String name, String msg) {
-		logger.info( "scrape: '" + name + "': " + msg);
+		LOGGER.info("scrape: '" + name + "': " + msg);
 	}
 
-	public static class StdoutWriter implements MBeanReceiver {
-		@Override
-		public void recordBean(
-				String domain,
-				LinkedHashMap<String, String> beanProperties,
-				LinkedList<String> attrKeys,
-				String attrName,
-				String attrType,
-				String attrDescription,
-				Object value) {
-			System.out.println(domain +
-					beanProperties +
-					attrKeys +
-					attrName +
-					": " + value);
-		}
-	}
-
-	/**
-	 * Convenience function to run standalone.
-	 */
-	public static void main(String[] args) throws Exception {
-		new JmxScraper(new LinkedList<>(), new LinkedList<>(), new StdoutWriter(), new JmxMBeanPropertyCache()).doScrape();
-	}
 }
 
