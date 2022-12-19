@@ -1,10 +1,15 @@
-package org.letter.perform.jmx;
+package org.letter.perform.jmx.collector;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * OptionalValueExtractor
+ *
+ * @author letter
+ */
 public class OptionalValueExtractor {
 
 	private static final Logger LOGGER = Logger.getLogger(OptionalValueExtractor.class.getName());

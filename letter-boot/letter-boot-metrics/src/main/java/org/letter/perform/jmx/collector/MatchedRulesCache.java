@@ -1,4 +1,4 @@
-package org.letter.perform.jmx;
+package org.letter.perform.jmx.collector;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * MatchedRulesCache is a cache for bean name to configured rule mapping (See JmxCollector.Receiver).
  * The cache also retains unmatched entries (a bean name not matching a rule pattern) to avoid
  * matching against the same pattern in later bean collections.
+ *
+ * @author letter
  */
 public class MatchedRulesCache {
     private final Map<JmxCollector.Rule, Map<String, MatchedRule>> cachedRules;

@@ -1,7 +1,6 @@
-package org.letter.perform.jmx;
+package org.letter.perform.jmx.collector;
 
 import io.prometheus.client.Collector;
-import org.letter.perform.jmx.bean.MBeanReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +17,7 @@ import static java.lang.String.format;
 /**
  * JmxCollector
  *
- * @author wuhao
+ * @author letter
  */
 public class JmxCollector extends Collector implements Collector.Describable {
 	private Pattern DEFAULT_PATTERN = Pattern.compile(".*");
@@ -48,8 +47,15 @@ public class JmxCollector extends Collector implements Collector.Describable {
 
 
 	private final JmxMBeanPropertyCache jmxMBeanPropertyCache = new JmxMBeanPropertyCache();
+	private List<String> extLabelNames, extLabelValues;
 
 	public JmxCollector() {
+	}
+
+	public void setTag(List<String> extLabelNames, List<String> extLabelValues){
+		this.extLabelNames  = extLabelNames;
+		this.extLabelValues = extLabelValues;
+
 	}
 
 	private Config getJmxConfig() {
@@ -226,9 +232,23 @@ public class JmxCollector extends Collector implements Collector.Describable {
 			}
 			labelNames.add("tttName");
 			labelValues.add("tttValues");
+//			if (extLabelNames!=null && extLabelValues != null){
+//				int i = 0;
+//				for (String item: extLabelNames){
+//					try {
+//						i++;
+//						labelNames.add(item);
+//						labelValues.add(extLabelValues.get(i));
+//					} catch (Exception e){
+//						continue;
+//					}
+//				}
+//			}
 
 			return new MatchedRule(fullname, matchName, type, help, labelNames, labelValues, value, valueFactor);
 		}
+
+
 
 		@Override
 		public void recordBean(
@@ -359,12 +379,10 @@ public class JmxCollector extends Collector implements Collector.Describable {
 			} else if (beanValue instanceof Boolean) {
 				value = (Boolean) beanValue ? 1 : 0;
 			} else {
-				LOGGER.info("Ignoring unsupported bean: " + beanName + attrName + ": " + beanValue);
+				LOGGER.debug("Ignoring unsupported bean: " + beanName + attrName + ": " + beanValue);
 				return;
 			}
-
-			// Add to samples.
-			LOGGER.info("add metric sample: " + matchedRule.name + " " + matchedRule.labelNames + " " + matchedRule.labelValues + " " + value.doubleValue());
+			LOGGER.debug("add metric sample: " + matchedRule.name + " " + matchedRule.labelNames + " " + matchedRule.labelValues + " " + value.doubleValue());
 			addSample(new MetricFamilySamples.Sample(matchedRule.name, matchedRule.labelNames, matchedRule.labelValues, value.doubleValue()), matchedRule.type, matchedRule.help);
 		}
 

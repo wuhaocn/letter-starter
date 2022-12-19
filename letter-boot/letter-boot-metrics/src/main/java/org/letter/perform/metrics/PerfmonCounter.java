@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 /**
  * PerfmonCounter
  *
- * @author wuhao
+ * @author letter
  */
 public class PerfmonCounter {
 	private PerfmonCounter() {

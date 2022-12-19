@@ -16,7 +16,7 @@ import java.lang.management.ManagementFactory;
 /**
  * MetricRegistryManager
  *
- * @author wuhao
+ * @author letter
  */
 public class MetricRegistryManager {
 
@@ -62,6 +62,7 @@ public class MetricRegistryManager {
 			server.registerMBean(this.conf, metricsConfig);
 			ObjectName metricsInfo = new ObjectName(METRICS_SERVICE);
 			server.registerMBean(new MetricsServiceInfo(), metricsInfo);
+			LOGGER.info("registerMbean Complete: {}  {}", METRICS_CONFIG, METRICS_SERVICE);
 		} catch (Exception e) {
 			LOGGER.warn("registerMbean Error: {}  {}", METRICS_CONFIG, METRICS_SERVICE);
 		}

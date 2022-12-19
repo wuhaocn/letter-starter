@@ -1,4 +1,4 @@
-package org.letter.perform.jmx;
+package org.letter.perform.jmx.collector;
 
 import javax.management.ObjectName;
 import java.util.LinkedHashMap;
@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 /**
  * This object stores a mapping of mBean objectNames to mBean key property lists. The main purpose of it is to reduce
  * the frequency with which we invoke PROPERTY_PATTERN when discovering mBeans.
+ *
+ * @author letter
  */
 public class JmxMBeanPropertyCache {
 	private static final Pattern PROPERTY_PATTERN = Pattern.compile(

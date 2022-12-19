@@ -1,6 +1,5 @@
-package org.letter.perform.jmx;
+package org.letter.perform.jmx.collector;
 
-import org.letter.perform.jmx.bean.MBeanReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +16,7 @@ import java.util.*;
 /**
  * JmxScraper
  *
- * @author wuhao
+ * @author letter
  */
 public class JmxScraper {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JmxScraper.class);
@@ -277,7 +276,7 @@ public class JmxScraper {
 	}
 
 	private static void logScrape(String name, String msg) {
-		LOGGER.info("scrape: '" + name + "': " + msg);
+		LOGGER.debug("scrape:{} :{}", name, msg);
 	}
 
 }

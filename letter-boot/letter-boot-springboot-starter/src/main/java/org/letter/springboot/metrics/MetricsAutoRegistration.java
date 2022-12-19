@@ -15,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author wuhao
- * @description: MetricsAutoConfiguration
+ * MetricsAutoConfiguration
+ *
+ * @author letter
  * @createTime 2022/12/13 23:36:00
  */
 public class MetricsAutoRegistration {

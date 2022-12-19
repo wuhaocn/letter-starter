@@ -5,6 +5,7 @@ import java.lang.management.ManagementFactory;
 
 /**
  * MetricsServiceInfo
+ *
  * @author letter
  **/
 public class MetricsServiceInfo implements MetricsServiceInfoMBean {

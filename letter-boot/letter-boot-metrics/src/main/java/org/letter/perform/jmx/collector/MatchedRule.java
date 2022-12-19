@@ -1,4 +1,4 @@
-package org.letter.perform.jmx;
+package org.letter.perform.jmx.collector;
 
 import io.prometheus.client.Collector.Type;
 
@@ -8,6 +8,8 @@ import java.util.List;
  * MatchedRule is the result of matching a JMX bean against the rules present in the configuration file.
  * As rules are matched using regular expressions, caching helps prevent having to match the same beans to the same list
  * of regular expressions.
+ *
+ * @author letter
  */
 public class MatchedRule {
     final String name;

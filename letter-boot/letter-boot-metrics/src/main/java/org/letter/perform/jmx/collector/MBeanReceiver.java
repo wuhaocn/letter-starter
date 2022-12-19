@@ -1,11 +1,17 @@
-package org.letter.perform.jmx.bean;
+package org.letter.perform.jmx.collector;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
+/**
+ * MBeanReceiver
+ *
+ * @author letter
+ */
 public interface MBeanReceiver {
 	/**
 	 * recordBean
+	 *
 	 * @param domain
 	 * @param beanProperties
 	 * @param attrKeys

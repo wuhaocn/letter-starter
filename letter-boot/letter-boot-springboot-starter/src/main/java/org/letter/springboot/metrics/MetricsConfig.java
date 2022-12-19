@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MetricsConfig
@@ -18,6 +20,7 @@ public class MetricsConfig {
 	private int port = 18080;
 	private String ip = null;
 	private String checkUrl = null;
+	private List<String> tag = new ArrayList<>();
 
 	public String getAppName() {
 		return appName;
@@ -79,4 +82,11 @@ public class MetricsConfig {
 		this.checkUrl = checkUrl;
 	}
 
+	public List<String> getTag() {
+		return tag;
+	}
+
+	public void setTag(List<String> tag) {
+		this.tag = tag;
+	}
 }

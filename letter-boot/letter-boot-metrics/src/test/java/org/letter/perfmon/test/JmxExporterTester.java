@@ -1,14 +1,9 @@
 package org.letter.perfmon.test;
 
-import io.prometheus.client.CollectorRegistry;
-import io.prometheus.client.dropwizard.DropwizardExports;
-import io.prometheus.client.exporter.HTTPServer;
-import org.letter.perform.jmx.BuildInfoCollector;
-import org.letter.perform.jmx.JmxCollector;
-import org.letter.perform.jmx.metrics.MetricRegistryManager;
+import org.letter.perform.jmx.collector.BuildInfoCollector;
+import org.letter.perform.jmx.collector.JmxCollector;
 
 import javax.management.MalformedObjectNameException;
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
