@@ -33,7 +33,7 @@ public class MetricsAutoRegistration {
 		try {
 			ServerRegistration registration = getServerRegistration(config);
 			RegisterManager.register(config.getConsulUrl(), registration);
-			MonitorExporter.start(config.getPort());
+			MonitorExporter.start(config.getIp(), config.getPort());
 			LOGGER.info("MetricsAutoRegistration Complete:{}:{} To:{}", config.getIp(),
 					config.getPort(), config.getConsulUrl());
 		} catch (Exception e) {

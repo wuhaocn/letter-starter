@@ -21,6 +21,7 @@ import static java.lang.String.format;
  */
 public class JmxCollector extends Collector implements Collector.Describable {
 	private Pattern DEFAULT_PATTERN = Pattern.compile(".*");
+	private String DEFAULT_JMX = "metrics:*";
 	private static final Logger LOGGER = LoggerFactory.getLogger(JmxCollector.class);
 
 	static class Rule {
@@ -61,7 +62,7 @@ public class JmxCollector extends Collector implements Collector.Describable {
 	private Config getJmxConfig() {
 		Config config = new Config();
 		try {
-			config.whitelistObjectNames = Arrays.asList(new ObjectName("metrics:*"));
+			config.whitelistObjectNames = Arrays.asList(new ObjectName(DEFAULT_JMX));
 			Rule rule = new Rule();
 			rule.pattern = DEFAULT_PATTERN;
 			config.rules.add(rule);
@@ -230,22 +231,29 @@ public class JmxCollector extends Collector implements Collector.Describable {
 					labelValues.add(entry.getValue());
 				}
 			}
-			labelNames.add("tttName");
-			labelValues.add("tttValues");
-//			if (extLabelNames!=null && extLabelValues != null){
-//				int i = 0;
-//				for (String item: extLabelNames){
-//					try {
-//						i++;
-//						labelNames.add(item);
-//						labelValues.add(extLabelValues.get(i));
-//					} catch (Exception e){
-//						continue;
-//					}
-//				}
-//			}
+
+			updateTags(labelNames, labelValues);
+
 
 			return new MatchedRule(fullname, matchName, type, help, labelNames, labelValues, value, valueFactor);
+		}
+
+
+		private void updateTags(List<String> labelNames, List<String> labelValues){
+			if (extLabelNames==null || extLabelValues == null || extLabelNames.size() != extLabelValues.size()){
+				return;
+			}
+			int i = 0;
+			for (String item: extLabelNames){
+				try {
+					labelNames.add(item);
+					labelValues.add(extLabelValues.get(i));
+					i++;
+				} catch (Exception e){
+					LOGGER.error("updateTags Error", e);
+				}
+			}
+
 		}
 
 

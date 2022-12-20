@@ -6,4 +6,5 @@ server:
 
 monitor:
   consulUrl: http://127.0.0.1:18500/v1/agent/service/register
-
+  ip: 127.0.0.1
+  port: 8091

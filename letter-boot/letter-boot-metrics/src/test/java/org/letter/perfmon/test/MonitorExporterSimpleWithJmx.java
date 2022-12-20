@@ -13,20 +13,25 @@ import java.util.Random;
  * @author wuhao
  * @createTime 2021-08-02 18:32:00
  */
-public class MonitorExporterSimple {
+public class MonitorExporterSimpleWithJmx {
 	public static void main(String[] args) throws IOException {
 		//启动监控server
+		initJmx();
 		MonitorExporter.start("127.0.0.1", 8091);
-	//	doPrometheus();
+		doPrometheus();
 		doDropwizard();
 
 
 	}
+
 	public static void initJmx(){
 		System.setProperty("com.sun.management.jmxremote.rmi.port", "2199");
-		System.setProperty("java.rmi.server.hostname", "localhost");
+		System.setProperty("com.sun.management.jmxremote.port", "2199");
+		System.setProperty("com.sun.management.jmxremote.ssl", "false");
+		System.setProperty("com.sun.management.jmxremote", "true");
 
 	}
+
 	public static void doDropwizard() {
 		//dropwizard
 		PerfmonCounter.Timer timer = PerfmonCounter.timer("rpc.dropwizard", "interface", "method");
@@ -74,6 +79,7 @@ public class MonitorExporterSimple {
 						requests.labels("rpc" + i, "service" + i, "method" + i).inc();
 						Summary.Timer timer1 = requestLatency.labels("rpc" + i, "service" + i, "method" + i).startTimer();
 						timer1.close();
+						Thread.sleep(i);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
