@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -20,13 +22,12 @@ public class MonitorExporter {
 	private static AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 	private static final Logger LOGGER = LoggerFactory.getLogger(MetricRegistryManager.class);
 
-	public static void start(String ip, int port){
+	public static void start(String ip, int port, List<String> tag) {
 		try {
 			if (atomicBoolean.compareAndSet(false, true)) {
 				MetricRegistryManager.getInstance();
 				JmxCollector jmxCollector = new JmxCollector();
-				jmxCollector.setTag(Arrays.asList("key1", "key2"),
-						Arrays.asList("value1", "value2"));
+				updateTag(jmxCollector, tag);
 				CollectorRegistry.defaultRegistry.register(jmxCollector);
 				HTTPServer httpServer = new HTTPServer(ip, port);
 				LOGGER.info("MonitorExporter.Start OK. {}://{}:{}", "http", ip, port);
@@ -36,5 +37,16 @@ public class MonitorExporter {
 		}
 
 
+	}
+
+	public static void updateTag(JmxCollector jmxCollector, List<String> tag) {
+		List<String> names = new ArrayList<>();
+		List<String> values = new ArrayList<>();
+		for (String item : tag){
+			String[] app = item.split(":");
+			names.add(app[0]);
+			values.add(app[1]);
+		}
+		jmxCollector.setTag(names, values);
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * CommonAutoConfiguration
  *
+ * @author wuhao
  */
 @Configuration
 public class CommonAutoConfiguration {
@@ -28,7 +29,7 @@ public class CommonAutoConfiguration {
 	@Bean
 	public MetricsAutoRegistration getMetricsAutoRegistration(){
 		MetricsAutoRegistration registration = new MetricsAutoRegistration();
-		registration.registerAndStart(config);
+		registration.registerAndStarter(config);
 		return registration;
 	}
 }

@@ -1,6 +1,8 @@
 package org.letter.perform.register;
 
 /**
+ * ServerMeta
+ *
  * @author wuhao
  * @description: ServerMeta
  * @createTime 2022/11/15 16:58:00
@@ -8,7 +10,6 @@ package org.letter.perform.register;
 
 public class ServerMeta {
 	private String version = "1.0";
-	private String item = "app";
 	private String app = "app";
 
 	public String getVersion() {
@@ -17,14 +18,6 @@ public class ServerMeta {
 
 	public void setVersion(String version) {
 		this.version = version;
-	}
-
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
-		this.item = item;
 	}
 
 	public String getApp() {

@@ -1,6 +1,8 @@
 package org.letter.perform.register;
 
 import org.letter.perform.utils.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -11,21 +13,42 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * RegisterManager
- *
+ * refer: https://www.consul.io/api-docs/agent/service#register-service
  * @author wuhao
  * @description: RegisterManager
  * @createTime 2022/11/15 16:48:00
  */
 
 public class RegisterManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterManager.class);
+	private AtomicBoolean start = new AtomicBoolean(false);
+	private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
-
-	public static String register(String addr, ServerRegistration registration) throws Exception {
-		String content = JsonUtil.toJson(registration).toString();
-		return put(addr, content);
+	public void start(String addr, ServerRegistration registration){
+		if (start.compareAndSet(false, true)){
+			scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						String content = JsonUtil.toJson(registration).toString();
+						put(addr, content);
+					} catch (Exception e) {
+						LOGGER.warn("register error:{}", addr);
+					}
+				}
+			}, 10, 10, TimeUnit.SECONDS);
+		}
+	}
+	public static void register(String addr, ServerRegistration registration) throws Exception {
+		RegisterManager registerManager = new RegisterManager();
+		registerManager.start(addr, registration);
 	}
 
 

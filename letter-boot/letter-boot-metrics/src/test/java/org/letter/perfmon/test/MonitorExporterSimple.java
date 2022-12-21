@@ -16,14 +16,21 @@ import java.util.Random;
 public class MonitorExporterSimple {
 	public static void main(String[] args) throws IOException {
 		//启动监控server
-		MonitorExporter.start("127.0.0.1", 8091);
+		initJmx();
+		Thread thread  = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MonitorExporter.start("127.0.0.1", 8091);
+			}
+		});
+		thread.start();
+
 	//	doPrometheus();
 		doDropwizard();
 
 
 	}
 	public static void initJmx(){
-		System.setProperty("com.sun.management.jmxremote.rmi.port", "2199");
 		System.setProperty("java.rmi.server.hostname", "localhost");
 
 	}

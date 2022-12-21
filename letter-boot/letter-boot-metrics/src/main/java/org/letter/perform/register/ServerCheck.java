@@ -1,9 +1,7 @@
 package org.letter.perform.register;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
+ * ServerCheck
  * @author wuhao
  * @description: ServerCheck
  * @createTime 2022/11/15 16:59:00
@@ -11,9 +9,9 @@ import java.util.List;
 
 public class ServerCheck {
 	/**
-	 * 90m
+	 * 60s
 	 */
-	private String deregisterCriticalServiceAfter = "90m";
+	private String deregisterCriticalServiceAfter = "60s";
 	/**
 	 * ["/usr/local/bin/check_redis.py"]
 	 */
@@ -22,12 +20,14 @@ public class ServerCheck {
 	/**
 	 * "10s"
 	 */
-	private String interval = "10s";
+	private String interval = "30s";
+
 
 	/**
 	 * "5s"
 	 */
 	private String timeout = "5s";
+
 
 	public String getDeregisterCriticalServiceAfter() {
 		return deregisterCriticalServiceAfter;
@@ -36,6 +36,7 @@ public class ServerCheck {
 	public void setDeregisterCriticalServiceAfter(String deregisterCriticalServiceAfter) {
 		this.deregisterCriticalServiceAfter = deregisterCriticalServiceAfter;
 	}
+
 
 	public String getHttp() {
 		return http;

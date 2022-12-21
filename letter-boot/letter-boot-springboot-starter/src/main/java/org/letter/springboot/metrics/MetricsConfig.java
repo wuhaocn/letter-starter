@@ -1,11 +1,12 @@
 package org.letter.springboot.metrics;
 
 import org.apache.commons.lang3.StringUtils;
+import org.letter.common.utils.NetUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * MetricsConfig
@@ -14,20 +15,34 @@ import java.util.List;
  **/
 @ConfigurationProperties(prefix = "monitor")
 public class MetricsConfig {
-	private String appName = "app";
+	private String id;
+	private String name = "app";
 	private String consulUrl = "http://127.0.0.1:18500/v1/agent/service/register";
-	private int aliveTime = 5;
+	private String alive = "1m";
+	private String interval = "20s";
 	private int port = 18080;
-	private String ip = null;
-	private String checkUrl = null;
+	private String ip;
+	private String monitorUrl;
 	private List<String> tag = new ArrayList<>();
 
-	public String getAppName() {
-		return appName;
+	public String getId() {
+		if (StringUtils.isNotEmpty(id)) {
+			return id;
+		}
+		id = UUID.randomUUID().toString();
+		return getName() + "_" + id;
 	}
 
-	public void setAppName(String appName) {
-		this.appName = appName;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getConsulUrl() {
@@ -38,12 +53,20 @@ public class MetricsConfig {
 		this.consulUrl = consulUrl;
 	}
 
-	public int getAliveTime() {
-		return aliveTime;
+	public String getAlive() {
+		return alive;
 	}
 
-	public void setAliveTime(int aliveTime) {
-		this.aliveTime = aliveTime;
+	public void setAlive(String alive) {
+		this.alive = alive;
+	}
+
+	public String getInterval() {
+		return interval;
+	}
+
+	public void setInterval(String interval) {
+		this.interval = interval;
 	}
 
 	public int getPort() {
@@ -54,39 +77,43 @@ public class MetricsConfig {
 		this.port = port;
 	}
 
-
-	public String getIp() {
-		if (StringUtils.isNotEmpty(ip)){
-			return ip;
-		}
-		try {
-			return InetAddress.getLocalHost().getHostAddress();
-		} catch (Exception e){
-
-		}
-		return "127.0.0.1";
-	}
-
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
 
-	public String getCheckUrl() {
-		if (StringUtils.isNotEmpty(checkUrl)){
-			return checkUrl;
+	public String getMonitorUrl() {
+		if (StringUtils.isNotEmpty(monitorUrl)) {
+			return monitorUrl;
 		}
-		return ip + ":" + port;
+		return String.format(URL_STR, "http", getIp(), getPort());
 	}
 
-	public void setCheckUrl(String checkUrl) {
-		this.checkUrl = checkUrl;
+	public void setMonitorUrl(String monitorUrl) {
+		this.monitorUrl = monitorUrl;
 	}
 
 	public List<String> getTag() {
-		return tag;
+		List<String> list = new ArrayList<>();
+		list.addAll(tag);
+		list.add(String.format(HOST_IP, "hostip", getIp()));
+		return list;
 	}
 
 	public void setTag(List<String> tag) {
 		this.tag = tag;
 	}
+
+	public String getIp() {
+		try {
+			if (StringUtils.isNotEmpty(ip)) {
+				return ip;
+			}
+			return NetUtils.getLocalAddress0().getHostAddress();
+		} catch (Exception e) {
+			return "127.0.0.1";
+		}
+	}
+
+	public static final String URL_STR = "%s://%s:%s";
+	public static final String HOST_IP = "%s:%s";
 }
