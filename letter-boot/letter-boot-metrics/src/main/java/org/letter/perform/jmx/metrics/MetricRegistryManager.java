@@ -2,10 +2,7 @@ package org.letter.perform.jmx.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.jmx.JmxReporter;
-import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
-import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
-import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
-import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
+import com.codahale.metrics.jvm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +23,11 @@ public class MetricRegistryManager {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(MetricRegistryManager.class);
 
 	static {
+		METRIC.register("jvm.fd.usage", new FileDescriptorRatioGauge());
 		METRIC.register("jvm.gc", new GarbageCollectorMetricSet());
 		METRIC.register("jvm.memory", new MemoryUsageGaugeSet());
-		METRIC.register("jvm.thread-states", new ThreadStatesGaugeSet());
-		METRIC.register("jvm.fd.usage", new FileDescriptorRatioGauge());
+		METRIC.register("jvm.thread.states", new ThreadStatesGaugeSet());
+
 	}
 
 	private static volatile MetricRegistryManager instance = null;

@@ -7,6 +7,7 @@ import org.letter.perform.exporter.MonitorExporter;
 import org.letter.perform.metrics.PerfmonCounter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -17,7 +18,7 @@ public class MonitorExporterSimpleWithJmx {
 	public static void main(String[] args) throws IOException {
 		//启动监控server
 		initJmx();
-		MonitorExporter.start("127.0.0.1", 8091);
+		MonitorExporter.start("127.0.0.1", 8091, new ArrayList<>());
 		doPrometheus();
 		doDropwizard();
 
