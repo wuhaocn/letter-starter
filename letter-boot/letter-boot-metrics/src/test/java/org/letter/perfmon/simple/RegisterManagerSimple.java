@@ -1,4 +1,4 @@
-package org.letter.perfmon.test;
+package org.letter.perfmon.simple;
 
 import org.letter.perform.register.RegisterManager;
 import org.letter.perform.register.ServerCheck;

@@ -1,4 +1,4 @@
-package org.letter.perform.jmx.collector;
+package org.letter.perfmon.jmx.collector;
 
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;

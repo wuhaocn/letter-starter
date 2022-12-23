@@ -1,4 +1,4 @@
-package org.letter.perform.jmx.collector;
+package org.letter.perfmon.jmx.collector;
 
 import io.prometheus.client.Collector.Type;
 
@@ -20,6 +20,7 @@ public class MatchedRule {
     final List<String> labelValues;
     final Double value;
     final double valueFactor;
+	final boolean invalid;
 
     private static final MatchedRule _unmatched = new MatchedRule();
 
@@ -32,6 +33,7 @@ public class MatchedRule {
         this.labelValues = null;
         this.value = null;
         this.valueFactor = 1.0;
+		this.invalid = false;
     }
 
     public MatchedRule(
@@ -42,7 +44,8 @@ public class MatchedRule {
             final List<String> labelNames,
             final List<String> labelValues,
             final Double value,
-            double valueFactor) {
+            double valueFactor,
+			boolean isInvalid) {
         this.name = name;
         this.matchName = matchName;
         this.type = type;
@@ -51,6 +54,7 @@ public class MatchedRule {
         this.labelValues = labelValues;
         this.value = value;
         this.valueFactor = valueFactor;
+		this.invalid = isInvalid;
     }
 
     /**
@@ -63,10 +67,16 @@ public class MatchedRule {
     }
 
     public boolean isUnmatched() {
+		if (invalid){
+			return true;
+		}
         return this == _unmatched;
     }
 
     public boolean isMatched() {
+		if (!invalid){
+			return true;
+		}
         return !isUnmatched();
     }
 }

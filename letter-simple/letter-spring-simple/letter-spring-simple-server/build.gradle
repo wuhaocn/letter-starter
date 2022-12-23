@@ -1,5 +1,5 @@
 dependencies {
-
+  compile project(':letter-boot:letter-boot-metrics')
   implementation project(':letter-boot:letter-boot-springboot-starter')
 //  implementation project(':letter-boot:letter-boot-metrics')
   //spring

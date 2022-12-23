@@ -1,4 +1,4 @@
-package org.letter.perform.jmx.collector;
+package org.letter.perfmon.jmx.collector;
 
 import javax.management.ObjectName;
 import java.util.LinkedHashMap;

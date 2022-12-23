@@ -1,4 +1,4 @@
-package org.letter.perform.jmx.collector;
+package org.letter.perfmon.jmx.collector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +62,7 @@ public class JmxScraper {
 			for (ObjectName objectName : mBeanNames) {
 				scrapeBean(beanConn, objectName);
 			}
-			LOGGER.info("doScrape Use:{}ms", (System.currentTimeMillis() - start) );
+			LOGGER.debug("doScrape Use:{}ms", (System.currentTimeMillis() - start) );
 		} catch (Exception e) {
 			LOGGER.error("doScrape Error:", e);
 		}

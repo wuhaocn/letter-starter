@@ -1,6 +1,8 @@
-package org.letter.perform.jmx.collector;
+package org.letter.perfmon.jmx.collector;
 
 import io.prometheus.client.Collector;
+import org.apache.commons.lang3.StringUtils;
+import org.letter.perform.jmx.metrics.MetricsConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +55,8 @@ public class JmxCollector extends Collector implements Collector.Describable {
 	public JmxCollector() {
 	}
 
-	public void setTag(List<String> extLabelNames, List<String> extLabelValues){
-		this.extLabelNames  = extLabelNames;
+	public void setTag(List<String> extLabelNames, List<String> extLabelValues) {
+		this.extLabelNames = extLabelNames;
 		this.extLabelValues = extLabelValues;
 
 	}
@@ -199,63 +201,78 @@ public class JmxCollector extends Collector implements Collector.Describable {
 				Type type) {
 			StringBuilder name = new StringBuilder();
 			name.append(domain);
-			if (beanProperties.size() > 0) {
-				name.append(SEP);
-				name.append(beanProperties.values().iterator().next());
-			}
-			for (String k : attrKeys) {
-				name.append(SEP);
-				name.append(k);
-			}
-			name.append(SEP);
-			name.append(attrName);
-			String fullname = safeName(name.toString());
-
-			if (config.lowercaseOutputName) {
-				fullname = fullname.toLowerCase();
-			}
-
-			List<String> labelNames = new ArrayList<String>();
-			List<String> labelValues = new ArrayList<String>();
-			if (beanProperties.size() > 1) {
-				Iterator<Map.Entry<String, String>> iter = beanProperties.entrySet().iterator();
-				// Skip the first one, it's been used in the name.
-				iter.next();
-				while (iter.hasNext()) {
-					Map.Entry<String, String> entry = iter.next();
-					String labelName = safeName(entry.getKey());
-					if (config.lowercaseOutputLabelNames) {
-						labelName = labelName.toLowerCase();
-					}
-					labelNames.add(labelName);
-					labelValues.add(entry.getValue());
+			String sourceName = "";
+			for (Map.Entry<String, String> entry : beanProperties.entrySet()) {
+				String key = entry.getKey();
+				if (MetricsConstant.NAME.equalsIgnoreCase(key)){
+					sourceName = entry.getValue();
 				}
 			}
+			List<String> labelNames = new ArrayList<String>();
+			List<String> labelValues = new ArrayList<String>();
 
-			updateTags(labelNames, labelValues);
+			String[] sourceNameItem = sourceName.split("\\.");
+			for (int i = 0; i < sourceNameItem.length; i++){
+				switch (i){
+					case 0:
+						name.append(SEP).append(sourceNameItem[i]);
+						break;
+					case 1:
+						labelNames.add(MetricsConstant.ITEM);
+						labelValues.add(sourceNameItem[i]);
+						break;
+					case 2:
+						labelNames.add(MetricsConstant.METHOD);
+						labelValues.add(sourceNameItem[i]);
+						break;
+					case 3:
+						labelNames.add(MetricsConstant.SIGN);
+						labelValues.add(sourceNameItem[i]);
+						break;
+					default:
+						labelNames.add("ext" + i);
+						labelValues.add(sourceNameItem[i]);
+						break;
 
+				}
 
-			return new MatchedRule(fullname, matchName, type, help, labelNames, labelValues, value, valueFactor);
+			}
+			boolean isInvalid = false;
+			if (StringUtils.isNotEmpty(attrName) &&
+					MetricsConstant.NUMBER.equalsIgnoreCase(attrName)){
+				isInvalid = true;
+			}
+			labelNames.add("type");
+			labelValues.add(attrName.toLowerCase());
+			String fullName = safeName(name.toString()).toLowerCase();
+			updateExtTags(labelNames, labelValues);
+			MatchedRule matchedRule = new MatchedRule(fullName, matchName, type, help,
+					labelNames, labelValues, value, valueFactor,isInvalid);
+			return matchedRule;
 		}
 
 
-		private void updateTags(List<String> labelNames, List<String> labelValues){
-			if (extLabelNames==null || extLabelValues == null || extLabelNames.size() != extLabelValues.size()){
+		/**
+		 * 添加外部标识tag
+		 * @param labelNames
+		 * @param labelValues
+		 */
+		private void updateExtTags(List<String> labelNames, List<String> labelValues) {
+			if (extLabelNames == null || extLabelValues == null || extLabelNames.size() != extLabelValues.size()) {
 				return;
 			}
 			int i = 0;
-			for (String item: extLabelNames){
+			for (String item : extLabelNames) {
 				try {
 					labelNames.add(item);
 					labelValues.add(extLabelValues.get(i));
 					i++;
-				} catch (Exception e){
+				} catch (Exception e) {
 					LOGGER.error("updateTags Error", e);
 				}
 			}
 
 		}
-
 
 
 		@Override
@@ -326,6 +343,9 @@ public class JmxCollector extends Collector implements Collector.Describable {
 				// If there's no name provided, use default export format.
 				if (rule.name == null) {
 					matchedRule = defaultExport(matchName, domain, beanProperties, attrKeys, rule.attrNameSnakeCase ? attrNameSnakeCase : attrName, help, value, rule.valueFactor, rule.type);
+					if (matchedRule == null){
+						continue;
+					}
 					addToCache(rule, matchName, matchedRule);
 					break;
 				}
@@ -368,7 +388,8 @@ public class JmxCollector extends Collector implements Collector.Describable {
 					}
 				}
 
-				matchedRule = new MatchedRule(name, matchName, rule.type, help, labelNames, labelValues, value, rule.valueFactor);
+				matchedRule = new MatchedRule(name, matchName, rule.type, help,
+						labelNames, labelValues, value, rule.valueFactor, false);
 				addToCache(rule, matchName, matchedRule);
 				break;
 			}

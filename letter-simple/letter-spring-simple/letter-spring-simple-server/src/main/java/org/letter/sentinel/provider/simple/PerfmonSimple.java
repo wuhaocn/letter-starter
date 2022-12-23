@@ -1,44 +1,23 @@
-package org.letter.perfmon.test;
+package org.letter.sentinel.provider.simple;
+
 
 import com.codahale.metrics.Meter;
 import io.prometheus.client.Counter;
 import io.prometheus.client.Summary;
-import org.letter.perform.exporter.MonitorExporter;
 import org.letter.perform.metrics.PerfmonCounter;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * @author wuhao
  * @createTime 2021-08-02 18:32:00
  */
-public class MonitorExporterSimple {
-	public static void main(String[] args) throws IOException {
-		//启动监控server
-		initJmx();
-		Thread thread  = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				MonitorExporter.start("127.0.0.1", 8091, new ArrayList<>());
-			}
-		});
-		thread.start();
+public class PerfmonSimple {
 
-	//	doPrometheus();
-		doDropwizard();
-
-
-	}
-	public static void initJmx(){
-		System.setProperty("java.rmi.server.hostname", "localhost");
-
-	}
 	public static void doDropwizard() {
 		//dropwizard
-		PerfmonCounter.Timer timer = PerfmonCounter.timer("rpc.dropwizard", "interface", "method");
-		Meter meter = PerfmonCounter.meter("rpc.dropwizard", "interface", "method");
+		PerfmonCounter.Timer timer = PerfmonCounter.timer("rpc_dropwizard", "akka", "method");
+		Meter meter = PerfmonCounter.meter("rpc.rpc_dropwizard", "akka", "method");
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {

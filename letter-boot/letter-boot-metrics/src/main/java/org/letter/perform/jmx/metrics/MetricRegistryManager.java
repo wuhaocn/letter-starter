@@ -23,10 +23,10 @@ public class MetricRegistryManager {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(MetricRegistryManager.class);
 
 	static {
-		METRIC.register("jvm.fd.usage", new FileDescriptorRatioGauge());
-		METRIC.register("jvm.gc", new GarbageCollectorMetricSet());
-		METRIC.register("jvm.memory", new MemoryUsageGaugeSet());
-		METRIC.register("jvm.thread.states", new ThreadStatesGaugeSet());
+		METRIC.register("jvm_fd_usage", new FileDescriptorRatioGauge());
+		METRIC.register("jvm_gc", new GarbageCollectorMetricSet());
+		METRIC.register("jvm_memory", new MemoryUsageGaugeSet());
+		METRIC.register("jvm_thread_states", new ThreadStatesGaugeSet());
 
 	}
 

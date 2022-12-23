@@ -1,6 +1,5 @@
 package org.letter.perform.jmx.metrics;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +16,35 @@ public class MetricsConstant {
 	 */
 	public static final List<String> SIMPLE = Arrays.asList("jvm.memory.pools",
 			"jvm.thread", "jvm.gc", "jvm.fd.usage", "jvm.memory.total");
+
+	/**
+	 * APP 服务及节点归类
+	 */
+	public static final String APP = "app";
+	public static final String NAME = "name";
+	//metrics<name=jvm_thread_states.blocked.count, type=gauges><>Value: 0
+	//name:jvm_thread_states  method:blocked item:count 拆解
+	//name:database  sign:app/config
+
+	//整体规则item(L1)_method_sign_ext1_ext2_ext3
+	/**
+	 * ITEM L1 rpc类别/数据库实例/redis实例
+	 */
+	public static final String ITEM = "item";
+
+	/**
+	 * METHOD L2 登录发消息/读/写
+	 */
+	public static final String METHOD = "method";
+
+	/**
+	 * SIGN L3 特殊标识类
+	 */
+	public static final String SIGN = "sign";
+
+
+
+
 	///type
 	public static final String GAUGE = "gauge";
 	public static final String TIMER = "timer";
@@ -26,6 +54,8 @@ public class MetricsConstant {
 
 	///sign
     public static final String CAPACITY = "capacity";
+	public static final String VALUE = "value";
+	public static final String NUMBER = "number";
     public static final String COUNT = "count";
     public static final String SIZE = "size";
     public static final String IN = "in";
