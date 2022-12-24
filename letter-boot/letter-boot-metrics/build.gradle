@@ -1,8 +1,6 @@
 dependencies {
   //log4j
   implementation "org.slf4j:slf4j-api:${slf4j_version}"
-//  //common
-//  implementation project(':letter-boot:letter-boot-common')
   //metrics
   compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
   compile "com.fasterxml.jackson.core:jackson-core:${jackson_version}"

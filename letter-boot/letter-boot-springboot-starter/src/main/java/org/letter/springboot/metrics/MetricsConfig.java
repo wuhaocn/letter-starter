@@ -15,14 +15,55 @@ import java.util.UUID;
  **/
 @ConfigurationProperties(prefix = "monitor")
 public class MetricsConfig {
-	private String id;
+
+	public static final String MONITOR_URL = "%s://%s:%s";
+	public static final String TAG_HOST_IP = "hostip:%s";
+	public static final String NODE_ID = "%s:%s";
+
+	/**
+	 * consul地址
+	 */
+	private String centerUrl = "http://127.0.0.1:18500/v1/agent/service/register";
+
+	/**
+	 * 服务名称
+	 */
 	private String name = "app";
-	private String consulUrl = "http://127.0.0.1:18500/v1/agent/service/register";
-	private String alive = "1m";
-	private String interval = "20s";
-	private int port = 18080;
+
+	/**
+	 * 节点名称
+	 */
+	private String id;
+
+	/**
+	 * 服务自动注销时间
+	 */
+	private String alive = "10m";
+	/**
+	 * 定期抓取时间
+	 */
+	private String interval = "30s";
+	/**
+	 * 抓取超时时间
+	 */
+	private String timeout = "5s";
+	/**
+	 * 主机IP
+	 */
 	private String ip;
+	/**
+	 * 监控端口
+	 */
+	private int port = 18080;
+
+	/**
+	 * 指标抓取url
+	 */
 	private String monitorUrl;
+
+	/**
+	 * 自定义指标
+	 */
 	private List<String> tag = new ArrayList<>();
 
 	public String getId() {
@@ -45,12 +86,20 @@ public class MetricsConfig {
 		this.name = name;
 	}
 
-	public String getConsulUrl() {
-		return consulUrl;
+	public String getCenterUrl() {
+		return centerUrl;
 	}
 
-	public void setConsulUrl(String consulUrl) {
-		this.consulUrl = consulUrl;
+	public void setCenterUrl(String centerUrl) {
+		this.centerUrl = centerUrl;
+	}
+
+	public String getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(String timeout) {
+		this.timeout = timeout;
 	}
 
 	public String getAlive() {
@@ -82,10 +131,11 @@ public class MetricsConfig {
 	}
 
 	public String getMonitorUrl() {
+
 		if (StringUtils.isNotEmpty(monitorUrl)) {
 			return monitorUrl;
 		}
-		return String.format(URL_STR, "http", getIp(), getPort());
+		return String.format(MONITOR_URL, "http", getIp(), getPort());
 	}
 
 	public void setMonitorUrl(String monitorUrl) {
@@ -95,7 +145,7 @@ public class MetricsConfig {
 	public List<String> getTag() {
 		List<String> list = new ArrayList<>();
 		list.addAll(tag);
-		list.add(String.format(HOST_IP, "hostip", getIp()));
+		list.add(String.format(TAG_HOST_IP, getIp()));
 		return list;
 	}
 
@@ -114,6 +164,5 @@ public class MetricsConfig {
 		}
 	}
 
-	public static final String URL_STR = "%s://%s:%s";
-	public static final String HOST_IP = "%s:%s";
+
 }

@@ -1,23 +1,42 @@
-package org.letter.sentinel.provider.simple;
-
+package org.letter.metrics.simple;
 
 import com.codahale.metrics.Meter;
 import io.prometheus.client.Counter;
 import io.prometheus.client.Summary;
+import org.letter.metrics.exporter.MonitorExporter;
 import org.letter.metrics.PerfmonCounter;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * @author wuhao
  * @createTime 2021-08-02 18:32:00
  */
-public class PerfmonSimple {
+public class MonitorExporterSimpleWithJmx {
+	public static void main(String[] args) throws IOException {
+		//启动监控server
+		initJmx();
+		MonitorExporter.start("127.0.0.1", 8091, new ArrayList<>());
+		doPrometheus();
+		doDropwizard();
+
+
+	}
+
+	public static void initJmx(){
+		System.setProperty("com.sun.management.jmxremote.rmi.port", "2199");
+		System.setProperty("com.sun.management.jmxremote.port", "2199");
+		System.setProperty("com.sun.management.jmxremote.ssl", "false");
+		System.setProperty("com.sun.management.jmxremote", "true");
+
+	}
 
 	public static void doDropwizard() {
 		//dropwizard
-		PerfmonCounter.Timer timer = PerfmonCounter.timer("rpc_dropwizard", "akka", "method");
-		Meter meter = PerfmonCounter.meter("rpc.rpc_dropwizard", "akka", "method");
+		PerfmonCounter.Timer timer = PerfmonCounter.timer("rpc.dropwizard", "interface", "method");
+		Meter meter = PerfmonCounter.meter("rpc.dropwizard", "interface", "method");
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -61,6 +80,7 @@ public class PerfmonSimple {
 						requests.labels("rpc" + i, "service" + i, "method" + i).inc();
 						Summary.Timer timer1 = requestLatency.labels("rpc" + i, "service" + i, "method" + i).startTimer();
 						timer1.close();
+						Thread.sleep(i);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

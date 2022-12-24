@@ -1,8 +1,8 @@
 package org.letter.springboot.metrics;
 
 import org.apache.commons.lang3.StringUtils;
-import org.letter.perform.exporter.MonitorExporter;
-import org.letter.perform.register.*;
+import org.letter.metrics.exporter.MonitorExporter;
+import org.letter.metrics.register.*;
 import org.letter.springboot.CommonAutoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,17 +29,17 @@ public class MetricsAutoRegistration {
 		}
 		try {
 			ServerRegistration registration = getServerRegistration(config);
-			RegisterManager.register(config.getConsulUrl(), registration);
+			RegisterManager.register(config.getCenterUrl(), registration);
 			MonitorExporter.start(config.getIp(), config.getPort(), config.getTag());
 			LOGGER.info("MetricsAutoRegistration Complete:{}:{} To:{}", config.getIp(),
-					config.getPort(), config.getConsulUrl());
+					config.getPort(), config.getCenterUrl());
 		} catch (Exception e) {
 			LOGGER.error("MetricsAutoRegistration registerAndStart Fail:{}:{}", config.getIp(), config.getPort(), e);
 		}
 	}
 
 	public boolean check(MetricsConfig config) {
-		if (StringUtils.isNotEmpty(config.getConsulUrl())) {
+		if (StringUtils.isNotEmpty(config.getCenterUrl())) {
 			return true;
 		}
 		return true;

@@ -1,3 +1,7 @@
+## 功能支持
+* 支持 dropwizard.metric
+* 支持 prometheus.simpleclient
+
 ## 服务注册
 ```
 PUT /v1/agent/service/register HTTP/1.1
