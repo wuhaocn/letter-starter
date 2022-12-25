@@ -3,6 +3,7 @@
 !.editorconfig
 letter.pid
 build
+/refer
 out
 /out
 /config

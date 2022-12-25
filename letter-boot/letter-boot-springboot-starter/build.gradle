@@ -5,6 +5,8 @@ dependencies {
   implementation "org.slf4j:slf4j-api:${slf4j_version}"
   implementation 'org.apache.commons:commons-lang3:3.12.0'
   implementation "org.springframework.boot:spring-boot-starter:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-web:${springboot_version}"
+
   implementation "org.springframework.boot:spring-boot-starter-aop:${springboot_version}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springboot_version}"
   implementation "org.springframework.boot:spring-boot-configuration-processor:${springboot_version}"
