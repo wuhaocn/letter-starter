@@ -1,9 +1,10 @@
 dependencies {
   //log4j
   implementation "org.slf4j:slf4j-api:${slf4j_version}"
-  //metrics
-  compile group: 'org.apache.dubbo', name: 'dubbo-spring-boot-starter', version: dubbo_version
-
+  implementation project(':letter-boot:letter-boot-springboot-starter')
+  //rpc
+  compile "org.apache.dubbo:dubbo-spring-boot-starter:${dubbo_version}"
+  compile "org.apache.dubbo:dubbo-registry-zookeeper:${dubbo_version}"
   //测试库
   testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.0'

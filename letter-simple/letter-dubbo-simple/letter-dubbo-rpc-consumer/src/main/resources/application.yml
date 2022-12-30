@@ -1,0 +1,33 @@
+server:
+  port: 8092
+spring:
+  application:
+    name: cloud-rpc-consumer
+    version: 1.0.0
+  profiles:
+    active: ${tenv:dev}
+dubbo:
+  registry:
+    address: ${REG_URL:zookeeper://127.0.0.1:2181}
+  protocols:
+    dubbo-rpc:
+      name: dubbo
+      port: ${PORT:8085}
+  #    letter-rpc:
+  #      name: letter
+  #      port: ${PORT:8083}
+  #    letter-rpc:
+  #      name: letter
+  #      port: ${PORT:8083}
+  provider:
+    filter: metrics
+monitor:
+  name: app
+  centerUrl: http://127.0.0.1:18500/v1/agent/service/register
+  #  ip: 127.0.0.1
+  port: 18092
+  tag:
+    - service:simpleapp
+    - cluster:prod
+    - dc:bj
+    - nodename:app1

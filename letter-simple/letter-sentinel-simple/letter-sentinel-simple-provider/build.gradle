@@ -6,9 +6,8 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springboot_version
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springboot_version
 
-  //sentinel
-// https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-core
-  implementation group: 'com.alibaba.csp', name: 'sentinel-core', version: '1.8.5'
+  compile group: 'com.alibaba.csp', name: 'sentinel-core', version: '1.8.6'
+  compile 'com.alibaba.csp:sentinel-parameter-flow-control:1.8.6'
 
 
   //测试库

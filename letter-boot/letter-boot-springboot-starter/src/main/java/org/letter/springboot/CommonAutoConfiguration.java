@@ -19,8 +19,7 @@ import java.util.Arrays;
  */
 @Configuration
 public class CommonAutoConfiguration {
-	@Autowired
-	private MetricsConfig config;
+
     @Bean
     public SpringContextUtil getSpringContextUtil(){
         return new SpringContextUtil();
@@ -34,7 +33,7 @@ public class CommonAutoConfiguration {
 	@Bean
 	public MetricsAutoRegistration getMetricsAutoRegistration(){
 		MetricsAutoRegistration registration = new MetricsAutoRegistration();
-		registration.registerAndStarter(config);
+		registration.registerAndStarter(metricsConfig());
 		return registration;
 	}
 

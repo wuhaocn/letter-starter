@@ -1,0 +1,6 @@
+dependencies {
+  compile project(':letter-boot:letter-boot-dubbo-starter')
+  compile project(':letter-simple:letter-dubbo-simple:letter-dubbo-rpc-api')
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version
+
+}
